@@ -1,17 +1,18 @@
-import { FormControl, VStack, FormLabel, Input, InputRightElement, InputGroup, Button, Text } from '@chakra-ui/react'
+import { FormControl, VStack, FormLabel, Input, InputRightElement, InputGroup, Button, Text, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 
 const Signup = () => {
     const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
     const [pic, setPic] = useState(false);
+    const [loading,setLoading] = useState(false);
+    const toast = useToast()
 
     const [form, setForm] = useState({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
-
     });
 
     const handleClick = () => {
@@ -21,11 +22,54 @@ const Signup = () => {
         setShow1(!show1);
     }
 
-    const postDetails = (files) => {
-            console.log('postDetails')
+    const postDetails = (pics) => {
+        setLoading(true);
+        if(pic === undefined){
+            toast({
+                title: 'Please select an Image',
+                status: 'Warning',
+                duration: 4000,
+                isClosable: true,
+                position:bottom
+              });
+              return;
+        }
+        if(pics.type === "image/jpeg" || pics.type === "image/png"){
+            const data = new FormData();  //Using FormData is important as it helps to read the image which are in binary form so for uploading pictures you have to use it
+            data.append("file", pics);
+            data.append("upload_preset","chatApp");
+            data.append("cloud_name","dbyzki2cf");
+            fetch("https://api.cloudinary.com/v1_1/dbyzki2cf/image/upload",{     //yaha /image/upload likhna important 
+                method:"POST",
+                body:data,
+             
+
+            }).then((res)=>res.json()).then((data)=>{
+                setPic(data.url.toString());
+                console.log(data);
+                setLoading(false);
+            }).catch((err)=>{
+                console.log(err);
+                setLoading(false);
+            });
+        }else{
+            toast({
+                title: 'Please select an Image',
+                status: 'Warning',
+                duration: 4000,
+                isClosable: true,
+                position:bottom
+              });
+              setLoading(false);
+              return;
+        }
+            
     }
     const submitHandler = () => {
-        console.log('submitHandler')
+        setLoading(true);
+        
+
+        
 
     }
 
@@ -107,6 +151,7 @@ const Signup = () => {
                 width={'100%'}
                 style={{ marginTop: 15 }}
                 onClick={submitHandler}
+                isLoading={loading}
             >
                 Sign Up
             </Button>
