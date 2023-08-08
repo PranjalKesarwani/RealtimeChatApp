@@ -1,24 +1,41 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = mongoose.Schema({
     name: {
-        type:String,
-        required:true
+        type: String,
+        required: true
     },
-    email:{
-     type: String, 
-     required: true
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
     password: {
         type: String,
-         required:true
+        required: true
     },
     pic: {
         type: String,
-         required:true,
-         default:"https://img.freepik.com/premium-vector/account-icon-user-icon-vector-graphics_292645-552.jpg"
+        default: "https://img.freepik.com/premium-vector/account-icon-user-icon-vector-graphics_292645-552.jpg"
     }
-},{timestamps:true});
+}, { timestamps: true });
+
+userSchema.methods.matchPassword = async function(enteredPassword){
+    return await bcrypt.compare(enteredPassword,this.password);
+}
+
+userSchema.pre('save', async function(next){
+    if(!this.isModified('password')){
+        console.log('1');
+        next();
+    }
+    console.log('2');
+
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password,salt);
+
+})
 
 const User = mongoose.model("User", userSchema);
 

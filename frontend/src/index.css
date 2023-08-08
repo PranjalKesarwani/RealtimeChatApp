@@ -10,7 +10,7 @@
  
     min-height: 100vh;
     display: flex;
-    background-image: url('../public//images/background.jpg');
+    background-image: url('/images/background.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
