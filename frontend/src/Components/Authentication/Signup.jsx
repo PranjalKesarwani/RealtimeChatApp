@@ -1,11 +1,14 @@
 import { FormControl, VStack, FormLabel, Input, InputRightElement, InputGroup, Button, Text, useToast } from '@chakra-ui/react'
+import axios from 'axios';
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
     const [show, setShow] = useState(false);
     const [show1, setShow1] = useState(false);
     const [pic, setPic] = useState(false);
     const [loading,setLoading] = useState(false);
+    const navigate = useNavigate()
     const toast = useToast()
 
     const [form, setForm] = useState({
@@ -24,7 +27,7 @@ const Signup = () => {
 
     const postDetails = (pics) => {
         setLoading(true);
-        if(pic === undefined){
+        if(pics === undefined){
             toast({
                 title: 'Please select an Image',
                 status: 'Warning',
@@ -55,7 +58,7 @@ const Signup = () => {
         }else{
             toast({
                 title: 'Please select an Image',
-                status: 'Warning',
+                status: 'warning',
                 duration: 4000,
                 isClosable: true,
                 position:bottom
@@ -65,9 +68,62 @@ const Signup = () => {
         }
             
     }
-    const submitHandler = () => {
+    const submitHandler =async () => {
         setLoading(true);
-        
+
+        if(!form.name || !form.email || !form.password || !form.confirmPassword){
+            toast({
+                title:"Please fill all the details",
+                status: "warning",
+                duration: 5000,
+                isClosable:true,
+                position:'bottom'
+            })
+        }
+        if(form.password != form.confirmPassword){
+            toast({
+                title:"Passwords do not match",
+                status: "warning",
+                duration: 5000,
+                isClosable:true,
+                position:'bottom'
+            })
+        }
+
+        try {
+            const config = {
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            }
+
+            const {data} = await axios.post("/api/user",form, config)
+
+            toast({
+                title:"Registration Successful!",
+                status:"success",
+                duration:5000,
+                isClosable:true,
+                position:"bottom"
+            })
+
+            localStorage.setItem("userInfo", JSON.stringify(data));
+
+            setLoading(false);
+
+            navigate('/chats');
+
+
+        } catch (error) {
+            toast({
+                title:"Error Occured!",
+                description: error.response.data.message,
+                status:"failure",
+                duration:5000,
+                isClosable:true,
+                position:"bottom"
+            })
+        }
 
         
 

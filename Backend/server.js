@@ -30,7 +30,7 @@ app.use(errorHandler);
 
 
 
-app.get('/',(req,res)=>{
+app.get('/api/user',(req,res)=>{
     res.send("Api is running");
 });
 
