@@ -1,12 +1,12 @@
 const express = require('express');
 const colors = require('colors');
 const dotenv = require('dotenv');
-const cors = require("cors");
 const {notFound,errorHandler} = require("./middleware/errorMiddleware")
 dotenv.config()
 require("./Config/db")
 const PORT =  process.env.PORT || 8000 ;
 const userRoutes = require('./Routes/userRoutes')
+const chatRoutes = require('./Routes/chatRoutes')
 const app = express();
 
 // app.use(cors({ origin: true, credentials: true }));
@@ -22,17 +22,13 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api/user',userRoutes);
 app.use(notFound);
 app.use(errorHandler);
+app.use('/api/user',userRoutes);
+app.use('/api/chat',chatRoutes);
 
 
 
-
-
-app.get('/api/user',(req,res)=>{
-    res.send("Api is running");
-});
 
 
 
