@@ -22,10 +22,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(notFound);
-app.use(errorHandler);
 app.use('/api/user',userRoutes);
 app.use('/api/chat',chatRoutes);
+app.use(notFound);
+app.use(errorHandler);
 
 
 
