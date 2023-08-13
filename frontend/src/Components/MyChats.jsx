@@ -5,8 +5,9 @@ import { ChatState } from '../Context/chatProvider';
 import { AddIcon } from '@chakra-ui/icons';
 import ChatLoading from './chatLoading';
 import { getSender } from '../config/ChatLogics';
+import GroupChatModal from './Miscellaneous/GroupChatModal';
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
 
   const [loggedUser, setLoggedUser] = useState()
   const { user, setSelectedChat, selectedChat, chats, setChats } = ChatState();
@@ -22,7 +23,6 @@ const MyChats = () => {
       }
 
       const { data } = await axios.get("/api/chat", config);
-      console.log(data);
       setChats(data);
     } catch (error) {
       toast({
@@ -39,7 +39,7 @@ const MyChats = () => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <Box
@@ -65,11 +65,11 @@ const MyChats = () => {
         color={'black'}
       >
         My Chats
-        <Button
-          display={'flex'}
-          fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-          rightIcon={<AddIcon />}
-        >New Group Chat</Button>
+        <GroupChatModal>
+          <Button display={'flex'} fontSize={{ base: "17px", md: "10px", lg: "17px" }} rightIcon={<AddIcon />}>
+            New Group Chat
+          </Button>
+        </GroupChatModal>
       </Box>
 
       <Box
@@ -96,7 +96,7 @@ const MyChats = () => {
                 key={chat._id}
               >
                 <Text>
-                  {!chat.isGroupChat ? getSender(loggedUser,chat.users):chat.chatName }
+                  {!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}
                 </Text>
               </Box>
             ))}

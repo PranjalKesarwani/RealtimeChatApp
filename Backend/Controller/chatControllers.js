@@ -3,6 +3,7 @@ const Chat = require("../Models/chatModels");
 const User = require('../Models/userModel');
 
 const accessChat = asyncHandler(async (req, res) => {
+
     const { userId } = req.body;
     if (!userId) {
         console.log("UserId param not sent with request");
@@ -24,14 +25,18 @@ const accessChat = asyncHandler(async (req, res) => {
         select: "name pic email"
     });
 
-    if (isChat.length > 0) {
+    if(isChat.length > 0) {
+        console.log('1');
         res.send(isChat[0]);
     } else {
-        var chatData = {
+        console.log('req.user._id '+req.user._id);
+        console.log('req.body.userId '+req.body.userId);
+        let chatData = {
             chatName: "sender",
             isGroupChat: false,
-            user: [req.user._id, userId]
+            users: [req.user._id, userId]
         };
+        console.log(chatData);
 
         try {
             const createdChat = await Chat.create(chatData);
