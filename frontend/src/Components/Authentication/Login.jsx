@@ -44,7 +44,6 @@ const Login = () => {
       };
       const {data} = await axios.post("/api/user/login", form,config);
 
-      console.log(JSON.stringify(data));
       toast({
         title:"Login Successful",
         status:"success",
