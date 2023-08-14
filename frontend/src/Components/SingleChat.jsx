@@ -9,12 +9,17 @@ import axios from 'axios';
 import './styles.css'
 import ScrollableChat from './ScrollableChat';
 
+import io from 'socket.io-client';
+const ENDPOINT = "http://localhost:5000";
+let socket, selectedChatCompare;
+
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [newMessagae, setNewMessaage] = useState();
+    const [socketConnected,setSocketConnected] = useState(false);
 
     const { user, selectedChat, setSelectedChat } = ChatState();
 
@@ -44,6 +49,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
             setMessages(data);
             setLoading(false);
+
+            socket.emit('join chat',selectedChat._id);
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -56,9 +63,30 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
     }
 
+    useEffect(()=>{
+        socket = io(ENDPOINT);
+        socket.emit("setup",user);
+        socket.on('connectoin',()=>{
+            setSocketConnected(true);
+        })
+    },[]);
+
     useEffect(() => {
         fetchMessages();
-    }, [selectedChat])
+
+        selectedChatCompare = selectedChat;
+    }, [selectedChat]);
+
+    useEffect(()=>{
+        socket.on("message received",(newMessageReceived)=>{
+            if(!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id){
+                //give notification
+
+            }else{
+                setMessages([...messages,newMessageReceived]);
+            }
+        });
+    })
 
     const sendMessage = async (event) => {
         if (event.key === "Enter" && newMessagae) {
@@ -79,6 +107,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 console.log(data);
 
 
+                socket.emit('new message', data);
+
                 setMessages([...messages, data]);
             } catch (error) {
                 toast({
@@ -94,6 +124,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
 
     }
+
+
+
+
     const typingHandler = (e) => {
         setNewMessaage(e.target.value);
 
@@ -183,4 +217,4 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     )
 }
 
-export default SingleChat
+export default SingleChat;
