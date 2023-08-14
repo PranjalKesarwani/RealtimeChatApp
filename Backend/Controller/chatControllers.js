@@ -26,17 +26,14 @@ const accessChat = asyncHandler(async (req, res) => {
     });
 
     if(isChat.length > 0) {
-        console.log('1');
         res.send(isChat[0]);
     } else {
-        console.log('req.user._id '+req.user._id);
-        console.log('req.body.userId '+req.body.userId);
+     
         let chatData = {
             chatName: "sender",
             isGroupChat: false,
             users: [req.user._id, userId]
         };
-        console.log(chatData);
 
         try {
             const createdChat = await Chat.create(chatData);
