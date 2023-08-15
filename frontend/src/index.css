@@ -30,3 +30,28 @@
 ::-webkit-scrollbar-thumb:hover{
     background: #555
 }
+
+.badge {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .badge-count {
+    position: absolute;
+    top: -4px;
+    right: 0px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    min-width: 14px;
+    min-height: 14px;
+    width: 18px;
+    height: 18px;
+    padding: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  

@@ -18,14 +18,14 @@ const ENDPOINT = "http://localhost:5000";
 let socket, selectedChatCompare;
 
 
-const defaultOptions = {
-    loop: true,
-    autoPlay: true,
-    animationData: animationData,
-    redererSettings: {
-        preserveAspectRatio: "xMidYMid slice"
-    }
-}
+// const defaultOptions = {
+//     loop: true,
+//     autoPlay: true,
+//     animationData: animationData,
+//     redererSettings: {
+//         preserveAspectRatio: "xMidYMid slice"
+//     }
+// }
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
@@ -36,7 +36,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
 
-    const { user, selectedChat, setSelectedChat } = ChatState();
+    const { user, selectedChat, setSelectedChat,notification,setNotification } = ChatState();
 
     const toast = useToast();
 
@@ -60,7 +60,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
             const { data } = await axios.get(`/api/message/${selectedChat._id}`, config);
 
-            console.log(messages);
+          
 
             setMessages(data);
             setLoading(false);
@@ -93,10 +93,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         selectedChatCompare = selectedChat;
     }, [selectedChat]);
 
+
+
     useEffect(() => {
         socket.on("message received", (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
-                //give notification
+                if(!notification.includes(newMessageReceived)){
+                    setNotification([newMessageReceived,...notification]);
+                    setFetchAgain(!fetchAgain);
+                }
 
             } else {
                 setMessages([...messages, newMessageReceived]);
@@ -125,7 +130,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
                 }, config);
 
-                console.log(data);
 
 
                 socket.emit('new message', data);
