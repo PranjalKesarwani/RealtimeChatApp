@@ -33,30 +33,38 @@ const io = require('socket.io')(server, {
 
 io.on("connection", (socket) => {
     console.log('connected to socket.io');
-    socket.on('setup',(userData)=>{   //It will take the userId and connect it to the socket and will create the room for this user
+    socket.on('setup', (userData) => {   //It will take the userId and connect it to the socket and will create the room for this user
         socket.join(userData._id);
         console.log(userData._id);
         socket.emit('connected');
 
     });
-    
-    socket.on('join chat', (room)=>{  //when another user will join it will be connected to the room and get joint
-            socket.join(room);
-            console.log("User Joined Room: " + room);
+
+    socket.on('join chat', (room) => {  //when another user will join it will be connected to the room and get joint
+        socket.join(room);
+        console.log("User Joined Room: " + room);
     });
 
-    socket.on('new message', (newMessageReceived)=>{
-            let chat = newMessageReceived.chat;
+    socket.on('typing', (room) => socket.in(room).emit("typing"));
+    socket.on('stop typing', (room) => socket.in(room).emit('stop typing'));
 
-            if(!chat.users){
-                return console.log('chat.users not defined');
-            }
 
-            chat.users.forEach(user =>{          //if you are chatting in a group and you want to send the message to everyone except yourself
-                if(user._id == newMessageReceived.sender._id) return;
+    socket.on('new message', (newMessageReceived) => {
+        let chat = newMessageReceived.chat;
 
-                socket.in(user._id).emit("message received", newMessageReceived); //in means inside that users room, emit/send messagae
-            })
+        if (!chat.users) {
+            return console.log('chat.users not defined');
+        }
+
+        chat.users.forEach(user => {          //if you are chatting in a group and you want to send the message to everyone except yourself
+            if (user._id == newMessageReceived.sender._id) return;
+
+            socket.in(user._id).emit("message received", newMessageReceived); //in means inside that users room, emit/send messagae
+        })
+    });
+    socket.off("setup",()=>{
+        console.log("USER DISCONNECTED!");
+        socket.leave(userData._id);
     })
 })
 
