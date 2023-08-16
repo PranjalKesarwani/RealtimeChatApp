@@ -15,7 +15,7 @@ function App() {
     <div className="App">
 
       <Router>
-        <ChatProvider>
+        <ChatProvider>    {/*ChatProvider is the global storage */}
           <Routes>
             <Route exact path='/' element={<Homepage />} />
             <Route exact path='/chats' element={<ChatPage />} />
