@@ -51,16 +51,16 @@ const accessChat = asyncHandler(async (req, res) => {
 
 const fetchChats = asyncHandler(async (req, res) => {
     try {
-        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
-            .populate("users", "-password")
-            .populate("groupAdmin", "-password")
-            .populate("latestMessage")
+        Chat.find({ users: { $elemMatch: { $eq: req.user._id } } }) //The users should match to the specified condition like here equal to req.user._id
+            .populate("users", "-password")  //{users} sabhi users aur unka data populate hua
+            .populate("groupAdmin", "-password")   //{users,groupAdmin}
+            .populate("latestMessage") //{users,groupAdmin,latestMessage} yaha latestMessage ke andar sender ki id bhi hoti hai
             .sort({ updatedAt: -1 })
             .then(async (results) => {
                 results = await User.populate(results, {
-                    path: "latestMessage.sender",
+                    path: "latestMessage.sender",        //kyoki sender ek user hai jo ki user me logged in hai so uska data bhi User model mehi milega so yaha User.populate hi kiya. results me latestMessage ek object hai, ab usme, ek sender hai jiski ek unique id hai, so uski details ke liye select use kiya hua hai
                     select: "name pic email"
-                })
+                })  //results = {users, groupAdmin, latestMessage:{sender}}
 
                 res.status(200).send(results);
             })
