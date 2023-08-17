@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new Error("User already exists");
     }
 
-    const user = await User.create({   //Here User.create will create and save the user
+    const user = await User.create({            //Here User.create will create and save the user
         name,
         email,
         password,
@@ -44,7 +44,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const authUser = asyncHandler(async (req,res)=>{
     const {email, password} = req.body;
     const user = await User.findOne({email});
-    if(user && (await user.matchPassword(password))){
+    if(user && (await user.matchPassword(password))){ //using bcrypt.compare for comparison
         res.json({
             _id: user._id,
             name: user.name,
@@ -60,18 +60,18 @@ const authUser = asyncHandler(async (req,res)=>{
 
 //  /api/user?search=piyush   Here we are making search functionality
 const allUsers = asyncHandler(async (req,res)=>{
-    const keyword  = req.query.search ? {      //Ye jo bhi chiz hai isko mongodb regex chrome me daalo read kro and take help from chatgpt
+    const keyword  = req.query.search ? {     
         $or: [
-            {name: {$regex: req.query.search, $options: "i"}},
+            {name: {$regex: req.query.search, $options: "i"}}, //$options:i case-insensitive
             {email: {$regex: req.query.search,$options:"i"}}
         ]
     }: {};
 
-    const users = await User.find(keyword).find({_id:{$ne:req.user._id}});
+    const users = await User.find(keyword).find({_id:{$ne:req.user._id}}); //Here i am applying additional filter to remove the user from the search list
     res.send(users);
 
 
-})
+});
 
 
 

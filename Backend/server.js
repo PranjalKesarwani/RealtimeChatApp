@@ -3,7 +3,7 @@ const colors = require('colors');
 const dotenv = require('dotenv');
 const { notFound, errorHandler } = require("./middleware/errorMiddleware")
 dotenv.config()
-require("./Config/db")
+require("./Config/db");
 const PORT = process.env.PORT || 8000;
 const userRoutes = require('./Routes/userRoutes')
 const chatRoutes = require('./Routes/chatRoutes')
