@@ -8,7 +8,7 @@ import UserListItem from '../UserAvatar/UserListItem';
 
 const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
 
-  const [groupChatName, setGroupChatName] = useState();
+  const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -139,7 +139,9 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
 
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-      setRenameLoading(false)
+      setRenameLoading(false);
+      setGroupChatName("");
+
 
 
     } catch (error) {
@@ -207,7 +209,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
             <Box w={'100%'} display={'flex'} flexWrap={"wrap"} pb={3}>
               {selectedChat.users.map((u) => (
                 <UserBadgeItem
-                  key={user._id}  //Here it is making an error as this badge will show all users in group including yourself, so when it will be rendered for every individual user u there will also need a key so at their my id will again get used as key
+                  key={u._id}  //Here it is making an error as this badge will show all users in group including yourself, so when it will be rendered for every individual user u there will also need a key so at their my id will again get used as key
                   user={u}
                   handleFunction={() => handleRemove(u)}
                 />

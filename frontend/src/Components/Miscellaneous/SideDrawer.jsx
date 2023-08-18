@@ -121,7 +121,7 @@ const SideDrawer = () => {
             </Text>
           </Button>
         </Tooltip>
-        <Text fontSize={"2xl"} fontFamily={"Work sans"}>
+        <Text fontSize={"2xl"} fontFamily={"Work sans"} fontWeight={"extrabold"} >
           Say Hii!
         </Text>
         <div>
@@ -153,9 +153,15 @@ const SideDrawer = () => {
               <Avatar size={'sm'} cursor={'pointer'} name={user.name} src={user.pic} />
             </MenuButton>
             <MenuList>
-              <ProfileModal user={user}>
-                {/* <MenuItem>My Profile</MenuItem> */}
-              </ProfileModal>
+              <Box display={'flex'}  >
+
+                <ProfileModal user={user}  >
+                Your Profile
+                </ProfileModal>
+                
+              </Box>
+
+
               <MenuDivider />
               <MenuItem onClick={() => { logoutHandler() }}>Logout</MenuItem>
             </MenuList>
