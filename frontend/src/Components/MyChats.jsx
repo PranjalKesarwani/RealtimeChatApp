@@ -44,7 +44,6 @@ const MyChats = ({ fetchAgain }) => {
   const chatHandler = (chat) => {
     setSelectedChat(chat);
     setNewMessage("");
-    console.log(notification);
     setNotification(notification.filter(n=> n.chat._id !==chat._id));
   }
 

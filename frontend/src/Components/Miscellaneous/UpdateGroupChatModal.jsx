@@ -59,6 +59,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setLoading(false);
+      setSearch("");
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -73,7 +74,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
   }
 
   const handleRemove = async (user1) => {
-    if (!selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
+    if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
       toast({
         title: "Only admins can remove someone",
         status: "error",
@@ -178,6 +179,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
       const { data } = await axios.get(`/api/user?search=${search}`, config);
       setLoading(false);
       setSearchResult(data);
+      
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -209,7 +211,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
             <Box w={'100%'} display={'flex'} flexWrap={"wrap"} pb={3}>
               {selectedChat.users.map((u) => (
                 <UserBadgeItem
-                  key={u._id}  //Here it is making an error as this badge will show all users in group including yourself, so when it will be rendered for every individual user u there will also need a key so at their my id will again get used as key
+                  key={u._id}   
                   user={u}
                   handleFunction={() => handleRemove(u)}
                 />
@@ -239,13 +241,14 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
                 placeholder='Add User to Group'
                 mb={1}
                 onChange={(e) => handleSearch(e.target.value)}
+                value={search}
               />
             </FormControl>
 
             {loading ? (
               <Spinner size={"lg"} />
             ) : (
-              searchResult?.map((user) => (
+              searchResult?.slice(0, 4).map((user) => (
                 <UserListItem
                   key={user._id}
                   user={user}
