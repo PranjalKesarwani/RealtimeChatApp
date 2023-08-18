@@ -21,13 +21,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [newMessagae, setNewMessaage] = useState("");
+    // const [newMessage, setNewMessage] = useState("");
     const [socketConnected, setSocketConnected] = useState(false);
     const [typing, setTyping] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
 
-    const { user, selectedChat, setSelectedChat,notification,setNotification } = ChatState();
-
+    const { user, selectedChat, setSelectedChat,notification,setNotification,newMessage,setNewMessage } = ChatState();
     const toast = useToast();
 
 
@@ -100,7 +99,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const sendMessage = async (event) => {
 
 
-        if (event.key === "Enter" && newMessagae) {
+        if (event.key === "Enter" && newMessage) {
 
             socket.emit('stop typing', selectedChat._id);
 
@@ -111,9 +110,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         Authorization: `Bearer ${user.token}`
                     }
                 }
-                setNewMessaage("");
+                setNewMessage("");
                 const { data } = await axios.post('/api/message', {
-                    content: newMessagae,
+                    content: newMessage,
                     chatId: selectedChat._id,
 
                 }, config);
@@ -139,7 +138,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
 
     const typingHandler = (e) => {
-        setNewMessaage(e.target.value);
+        setNewMessage(e.target.value);
 
         if (!socketConnected) return;
 
@@ -235,7 +234,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                         style={{ marginBottom: 15, marginLeft: 0 }}
                                     />
                                 </div> : (<></>)}
-                                <Input variant={'filled'} bg={'#e0e0e0'} placeholder='Enter a message...' onChange={typingHandler} value={newMessagae} />
+                                <Input variant={'filled'} bg={'#e0e0e0'} placeholder='Enter a message...' onChange={typingHandler} value={newMessage} />
                                 
 
 
