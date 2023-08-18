@@ -8,7 +8,7 @@ import UpdateGroupChatModal from './Miscellaneous/UpdateGroupChatModal';
 import axios from 'axios';
 import './styles.css'
 import ScrollableChat from './ScrollableChat';
-import { Player } from '@lottiefiles/react-lottie-player';
+// import { Player } from '@lottiefiles/react-lottie-player';
 import animationData from "../Animations/Typing.json"
 import Lottie from 'lottie-react';
 

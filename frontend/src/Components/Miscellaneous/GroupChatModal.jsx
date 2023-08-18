@@ -18,6 +18,7 @@ const GroupChatModal = ({ children }) => {
 
     const { user, chats, setChats } = ChatState();
 
+
     const handleSearch = async (query) => {
         setSearch(query);
         if (!query) {
@@ -34,10 +35,10 @@ const GroupChatModal = ({ children }) => {
             console.log(search);
 
             const { data } = await axios.get(`/api/user?search=${search}`, config);
-          
+
             setLoading(false);
             setSearchResult(data);
-            
+
         } catch (error) {
             toast({
                 title: "Error Occured",
@@ -76,7 +77,7 @@ const GroupChatModal = ({ children }) => {
                 config);
 
             setChats([data, ...chats])
-            
+
             onClose();
             toast({
                 title: "New Group Chat Created",
@@ -115,6 +116,8 @@ const GroupChatModal = ({ children }) => {
         }
 
         setSelectedUsers([...selectedUsers, userToAdd]);
+     
+        setSearchResult([]);
         setSearch("");
 
 
@@ -147,17 +150,19 @@ const GroupChatModal = ({ children }) => {
                         <Box w={'100%'} display={'flex'} justifyContent={'flex-start'} flexWrap={'wrap'}>
 
                             {selectedUsers.map(u => (
-                                <UserBadgeItem key={user._id} user={u} handleFunction={() => handleDelete(u)} />
+                                <UserBadgeItem key={u._id} user={u} handleFunction={() => handleDelete(u)} />
                             ))}
                         </Box>
 
 
                         {loading ? <div>Loading</div> : (
 
-                            searchResult?.slice(0, 4).map((user) => (
+                            searchResult?.slice(0, 4).map((singleUser) => {
+                                
 
-                                <UserListItem key={user._id} user={user} handleFunction={() => handleGroup(user)} />
-                            ))
+                                
+                               return <UserListItem key={singleUser._id} user={singleUser} handleFunction={() => handleGroup(singleUser)} />
+                        })
 
                         )}
                     </ModalBody>
