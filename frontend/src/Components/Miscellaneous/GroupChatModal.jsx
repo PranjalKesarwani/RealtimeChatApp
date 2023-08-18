@@ -31,11 +31,13 @@ const GroupChatModal = ({ children }) => {
                     Authorization: `Bearer ${user.token}`
                 }
             };
+            console.log(search);
 
             const { data } = await axios.get(`/api/user?search=${search}`, config);
           
             setLoading(false);
             setSearchResult(data);
+            
         } catch (error) {
             toast({
                 title: "Error Occured",
@@ -74,6 +76,7 @@ const GroupChatModal = ({ children }) => {
                 config);
 
             setChats([data, ...chats])
+            
             onClose();
             toast({
                 title: "New Group Chat Created",
@@ -112,6 +115,7 @@ const GroupChatModal = ({ children }) => {
         }
 
         setSelectedUsers([...selectedUsers, userToAdd]);
+        setSearch("");
 
 
     }
@@ -137,7 +141,7 @@ const GroupChatModal = ({ children }) => {
                             <Input placeholder='Chat Name' mb={3} onChange={(e) => setGroupChatName(e.target.value)} />
                         </FormControl>
                         <FormControl>
-                            <Input placeholder='Add Users: eg. Sachin, Rohit...' mb={3} onChange={(e) => handleSearch(e.target.value)} />
+                            <Input placeholder='Add Users: eg. Sachin, Rohit...' mb={3} value={search} onChange={(e) => handleSearch(e.target.value)} />
                         </FormControl>
 
                         <Box w={'100%'} display={'flex'} justifyContent={'flex-start'} flexWrap={'wrap'}>
@@ -146,7 +150,6 @@ const GroupChatModal = ({ children }) => {
                                 <UserBadgeItem key={user._id} user={u} handleFunction={() => handleDelete(u)} />
                             ))}
                         </Box>
-
 
 
                         {loading ? <div>Loading</div> : (

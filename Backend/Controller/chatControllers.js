@@ -25,7 +25,7 @@ const accessChat = asyncHandler(async (req, res) => {
         select: "name pic email"
     });
 
-    if(isChat.length > 0) {
+    if(isChat.length > 0) {  //if we did't found the users then isChat.length will be 0 so in that case we will go inside else condition
         res.send(isChat[0]);
     } else {
      

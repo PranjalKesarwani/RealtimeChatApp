@@ -17,16 +17,6 @@ import io from 'socket.io-client';
 const ENDPOINT = "http://localhost:5000";
 let socket, selectedChatCompare;
 
-
-// const defaultOptions = {
-//     loop: true,
-//     autoPlay: true,
-//     animationData: animationData,
-//     redererSettings: {
-//         preserveAspectRatio: "xMidYMid slice"
-//     }
-// }
-
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     const [messages, setMessages] = useState([]);
@@ -93,8 +83,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         selectedChatCompare = selectedChat;
     }, [selectedChat]);
 
-
-
     useEffect(() => {
         socket.on("message received", (newMessageReceived) => {
             if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
@@ -149,9 +137,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         }
 
     }
-
-
-
 
     const typingHandler = (e) => {
         setNewMessaage(e.target.value);
@@ -242,19 +227,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
 
                                 {isTyping ? <div style={{width:"60px",height:"50px"}} >
-                                    {/* <Player
-                                        options={defaultOptions}
-                                         width={70} 
-                                        style={{marginBottom:15, marginLeft:0}}
-                                    /> */}
-                                    {/* <Player
-                                        src={animationData}
-                                        className="player"
-                                        loop
-                                        autoplay
-                                        width={'5%'}
-                                        style={{ marginBottom: 15, marginLeft: 0 }}
-                                    /> */}
+                              
                                     
                                     <Lottie
                                         animationData={animationData}
@@ -263,6 +236,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                     />
                                 </div> : (<></>)}
                                 <Input variant={'filled'} bg={'#e0e0e0'} placeholder='Enter a message...' onChange={typingHandler} value={newMessagae} />
+                                
 
 
 

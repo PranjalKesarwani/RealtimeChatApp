@@ -21,7 +21,7 @@ const SideDrawer = () => {
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState();
 
-  const { user,setSelectedChat,chats,setChats,notification,setNotification } = ChatState();
+  const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
 
   const logoutHandler = () => {
 
@@ -52,7 +52,7 @@ const SideDrawer = () => {
         }
       }
 
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+      const { data } = await axios.get(`/api/user?search=${search}`, config); //questionMark shows that i am sending the query
 
 
 
@@ -72,7 +72,7 @@ const SideDrawer = () => {
     }
   }
 
-  const accessChat =async (userId) => {
+  const accessChat = async (userId) => {
     try {
       setLoadingChat(true);
       const config = {
@@ -82,21 +82,23 @@ const SideDrawer = () => {
         }
       }
 
-      const {data} = await axios.post('/api/chat',{userId},config);
+      const { data } = await axios.post('/api/chat', { userId }, config);
 
-      if(!chats.find((c)=>c._id === data._id)){
-        setChats([data,...chats]);
+
+      if (!chats.find((c) => c._id === data._id)) {
+        setChats([data, ...chats]);
       }
 
-      setSelectedChat(data);
+      setSelectedChat(data);  //From here i am setting the setSelectedChat in the chatState
+      setSearch("")
       setLoadingChat(false);
       onClose();
 
     } catch (error) {
-      
+
       toast({
         title: "Error fetching the chat",
-        description:error.message,
+        description: error.message,
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -125,25 +127,25 @@ const SideDrawer = () => {
         <div>
           <Menu>
             <MenuButton p={"1"}>
-{/* -----------------------------------------Notification badge Here------------------------------------------- */}
-             <div className="badge">
-              <BellIcon fontSize={"2xl"} m={1} />
-              {notification.length>0 ? <span className="badge-count">{notification.length}</span> : <></> }
-              
-             </div>
+              {/* -----------------------------------------Notification badge Here------------------------------------------- */}
+              <div className="badge">
+                <BellIcon fontSize={"2xl"} m={1} />
+                {notification.length > 0 ? <span className="badge-count">{notification.length}</span> : <></>}
 
-             
+              </div>
+
+
             </MenuButton>
             <MenuList pl={2} >
-            {!notification.length && "No New Messages"}   
-            {notification.map(notif => (
-              <MenuItem key={notif._id} onClick={()=>{
-                setSelectedChat(notif.chat);
-                setNotification(notification.filter((n)=> n !== notif));
-              }} >
-                  {notif.chat.isGroupChat ? `New Message in ${notif.chat.chatName}` : `New Message from ${getSender(user,notif.chat.users)}`}
-              </MenuItem>
-            ))} 
+              {!notification.length && "No New Messages"}
+              {notification.map(notif => (
+                <MenuItem key={notif._id} onClick={() => {
+                  setSelectedChat(notif.chat);
+                  setNotification(notification.filter((n) => n !== notif));
+                }} >
+                  {notif.chat.isGroupChat ? `New Message in ${notif.chat.chatName}` : `New Message from ${getSender(user, notif.chat.users)}`}
+                </MenuItem>
+              ))}
             </MenuList>
           </Menu>
           <Menu>
@@ -168,7 +170,9 @@ const SideDrawer = () => {
             <Box display={'flex'} pb={2}>
               <Input placeholder='Search by name or email' mr={2} value={search} onChange={(e) => { setSearch(e.target.value) }} />
               <Button
-                onClick={() => handleSearch()}>Go</Button>
+                onClick={() => handleSearch()}>
+                Go
+              </Button>
             </Box>
             {loading ? (
               <ChatLoading />
@@ -179,7 +183,7 @@ const SideDrawer = () => {
 
             )}
 
-            {loadingChat && <Spinner ml={"auto"} display={"flex"} /> }
+            {loadingChat && <Spinner ml={"auto"} display={"flex"} />}
           </DrawerBody>
         </DrawerContent>
 
