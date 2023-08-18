@@ -137,11 +137,12 @@ const SideDrawer = () => {
 
             </MenuButton>
             <MenuList pl={2} >
-              {!notification.length && "No New Messages"}
+              {!notification.length && "No New Messages"}  {/*In this condition when first condition is true then second condition will be returned*/}
               {notification.map(notif => (
                 <MenuItem key={notif._id} onClick={() => {
                   setSelectedChat(notif.chat);
                   setNotification(notification.filter((n) => n !== notif));
+                  
                 }} >
                   {notif.chat.isGroupChat ? `New Message in ${notif.chat.chatName}` : `New Message from ${getSender(user, notif.chat.users)}`}
                 </MenuItem>

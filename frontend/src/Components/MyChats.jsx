@@ -10,7 +10,7 @@ import GroupChatModal from './Miscellaneous/GroupChatModal';
 const MyChats = ({ fetchAgain }) => {
 
   const [loggedUser, setLoggedUser] = useState()
-  const { user, setSelectedChat, selectedChat, chats, setChats,setNewMessage } = ChatState();
+  const { user, setSelectedChat, selectedChat, chats, setChats, setNewMessage, notification, setNotification } = ChatState();
 
   const toast = useToast();
 
@@ -40,6 +40,13 @@ const MyChats = ({ fetchAgain }) => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
   }, [fetchAgain]);
+
+  const chatHandler = (chat) => {
+    setSelectedChat(chat);
+    setNewMessage("");
+    console.log(notification);
+    setNotification(notification.filter(n=> n.chat._id !==chat._id));
+  }
 
   return (
     <Box
@@ -86,7 +93,7 @@ const MyChats = ({ fetchAgain }) => {
           <Stack overflowY="scroll">
             {chats.map((chat) => (
               <Box
-                onClick={() =>{ setSelectedChat(chat); setNewMessage("")} }
+                onClick={() => { chatHandler(chat) }}
                 cursor={'pointer'}
                 bg={selectedChat === chat ? "#38b2ac" : "#e8e8e8"}
                 color={selectedChat === chat ? "white" : "black"}
