@@ -4,12 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-<<<<<<< HEAD
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
-=======
-    "dist": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
->>>>>>> d70e57602d68fe9793f8cfa3dcc487020d8b4fab
   },
   "author": "Pranjal",
   "license": "ISC",
