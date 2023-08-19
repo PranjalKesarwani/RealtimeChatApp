@@ -248,11 +248,11 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain,fetchMessages }) => {
             {loading ? (
               <Spinner size={"lg"} />
             ) : (
-              searchResult?.slice(0, 4).map((user) => (
+              searchResult?.slice(0, 4).map((u) => (
                 <UserListItem
-                  key={user._id}
-                  user={user}
-                  handleFunction={() => handleAddUser(user)}
+                  key={u._id}
+                  user={u}
+                  handleFunction={() => handleAddUser(u)}
 
                 />
               ))

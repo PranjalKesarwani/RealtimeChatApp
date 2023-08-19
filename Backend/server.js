@@ -7,7 +7,8 @@ require("./Config/db");
 const PORT = process.env.PORT || 8000;
 const userRoutes = require('./Routes/userRoutes')
 const chatRoutes = require('./Routes/chatRoutes')
-const messageRoutes = require('./Routes/messageRoutes')
+const messageRoutes = require('./Routes/messageRoutes');
+const path = require('path');
 const app = express();
 
 
@@ -16,6 +17,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/message', messageRoutes);
+
+
+//-------------------------Deployment-------------------------------------------------
+
+
+// const __dirname1 = path.resolve();
+// if(process.env.NODE_ENV === 'production'){
+
+//     app.user(express.static(path.join(__dirname1,'/frontend/build'))); //i am establishing the path from current working directory to the build folder of frontend
+
+// }else{
+//     app.get("/",(req,res)=>{
+//         res.send("API running successfully!");
+//     })
+// }
+
+
+//-------------------------Deployment-------------------------------------------------
+
+
+
+
 app.use(notFound);
 app.use(errorHandler);
 
